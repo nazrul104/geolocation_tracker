@@ -1,0 +1,20 @@
+<ion-view view-title="Login">
+  <ion-content class="padding">
+                              <form action="http://www.earchief.nl/microadmin/?obj=authentication&json=process&layout=login&au_then_ti_ca_tion=PostLogin">
+                            <label class="item item-input">
+                                <i class="icon ion-email placeholder-icon"></i>
+                                <input type="email" required placeholder="Username" name="email" ng-model="login.username">
+                            </label>
+                            <label class="item item-input">
+                                <i class="icon ion-locked placeholder-icon"></i>
+                                <input type="password" required placeholder="Password" name="password"ng-model="login.password">
+                            </label>
+                            <div>
+                                <button type="submit" class="button button-full button-positive">
+                                    Login
+                                </button>
+                            </div>
+                             <input type="hidden" name="myhash" value>
+                        </form>
+  </ion-content>
+</ion-view>
