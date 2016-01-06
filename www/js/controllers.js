@@ -13,82 +13,44 @@ angular.module('starter.controllers', [])
             $scope.hello = data;
             console.log(data);
         })*/
-
-$http({
-cache: false,
-url: 'http://www.earchief.nl/microadmin/?obj=authentication&json=process&layout=login&au_then_ti_ca_tion=PostLogin',
-method: "POST",
-data: JSON.stringify($scope.data),
-headers: {'Content-Type': 'application/x-www-form-urlencoded' }
-}).
-success(function (data){
-  console.log(data);
-}).
-error(function () {
-// if you are here something is not going so good
-})
   }
 })
 
-.controller('ChatsCtrl', function($scope, Chats, $cordovaGeolocation) {
-  // With the new view caching in Ionic, Controllers are only called
-  // when they are recreated or on app start, instead of every page change.
-  // To listen for when this page is active (for example, to refresh data),
-  // listen for the $ionicView.enter event:
-  //
-  //$scope.$on('$ionicView.enter', function(e) {
-  //});
-$scope.counter=1;
-$scope.lat=0;
-$scope.xlong=0;
-$scope.loc=[];
-  $scope.chats = Chats.all();
-  $scope.remove = function(chat) {
-    Chats.remove(chat);
-  };
+.controller('ContactList', function($scope, myservice, $cordovaGeolocation) 
+{
+        var posOptions = {timeout: 10000, enableHighAccuracy: false};
+      $cordovaGeolocation
+      .getCurrentPosition(posOptions)
+      .then(function (position) {
+        var lat  = position.coords.latitude
+        var long = position.coords.longitude
+        console.log(lat);
+      }, function(err) 
+      {
+      });
+      
+  $scope.UserLocation = function()
+  {
+      var posOptions = {timeout: 10000, enableHighAccuracy: false};
+      $cordovaGeolocation
+      .getCurrentPosition(posOptions)
+      .then(function (position) {
+        var lat  = position.coords.latitude
+        var long = position.coords.longitude
+        console.log(lat);
+      }, function(err) 
+      {
+      });
+  }
 
-  var posOptions = {timeout: 10000, enableHighAccuracy: false};
-
-  $cordovaGeolocation
-    .getCurrentPosition(posOptions)
-    .then(function (position) {
-      $scope.lat  = position.coords.latitude
-      $scope.xlong = position.coords.longitude
-      var p={"lat":$scope.lat,"long":$scope.xlong};
-      $scope.loc.push(p);
-    }, function(err) {
-      // error
-    });
-
-
-  var watchOptions = {
-    timeout : 3000,
-    enableHighAccuracy: false // may cause errors if true
-  };
-
-  var watch = $cordovaGeolocation.watchPosition(watchOptions);
-  watch.then(
-    null,
-    function(err) {
-      // error
-    },
-    function(position) {
-      $scope.lat  = position.coords.latitude
-      $scope.xlong = position.coords.longitude
-    var p={"lat":$scope.lat,"long":$scope.xlong};
-      $scope.loc.push(p);
-  });
-
-
-  //watch.clearWatch();
+  setInterval(function()
+  {
+     $scope.UserLocation();
+  }, 600000);
 })
 
-.controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
-  $scope.chat = Chats.get($stateParams.chatId);
-})
-
-.controller('AccountCtrl', function($scope) {
-  $scope.settings = {
-    enableFriends: true
-  };
+.controller('ContactDetails', function($scope, $stateParams, myservice)
+ {
+  $scope.chat = myservice.get($stateParams.chatId);
 });
+
